@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revista Digital</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#2f2f2f;
+    font-family:Arial, Helvetica, sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.contenedor{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+button{
+    width:70px;
+    height:70px;
+    border:none;
+    border-radius:50%;
+    font-size:28px;
+    cursor:pointer;
+    background:white;
+    box-shadow:0 5px 15px rgba(0,0,0,.4);
+    transition:.3s;
+}
+
+button:hover{
+    transform:scale(1.08);
+    background:#eeeeee;
+}
+
+.libro{
+    position:relative;
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 20px 40px rgba(0,0,0,.5);
+    margin-bottom:80px;
+}
+
+.libro img{
+    width:1200px;
+    max-width:95vw;
+    height:auto;
+    display:block;
+}
+
+#contador{
+    position:absolute;
+    bottom:20px;
+    color:white;
+    font-size:20px;
+}
+
+#zonaSiguiente{
+    position:absolute;
+    display:none;
+    right:18px;
+    bottom:18px;
+    width:210px;
+    height:90px;
+    cursor:pointer;
+    z-index:100;
+    background:rgba(255,0,0,0);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+<button id="anterior">◀</button>
+
+<div class="libro">
+
+<img id="pagina" src="imagenes/portada.jpg">
+
+<div id="zonaSiguiente"></div>
+
+</div>
+
+<button id="siguiente">▶</button>
+
+</div>
+
+<div id="contador">
+Página 1 de 10
+</div>
+
+<script>
+
+const paginas=[
+
+"imagenes/portada.jpg",
+
+"imagenes/pagina01.jpg",
+
+"imagenes/pagina02.jpg",
+
+"imagenes/pagina03.jpg",
+
+"imagenes/pagina04.jpg",
+
+"imagenes/pagina05.jpg",
+
+"imagenes/pagina06.jpg",
+
+"imagenes/pagina07.jpg",
+
+"imagenes/pagina08.jpg",
+
+"imagenes/pagina09.jpg"
+
+];
+
+let actual=0;
+
+const imagen=document.getElementById("pagina");
+const contador=document.getElementById("contador");
+
+const btnAnterior=document.getElementById("anterior");
+const btnSiguiente=document.getElementById("siguiente");
+
+const zona=document.getElementById("zonaSiguiente");
+
+function actualizar(){
+
+    imagen.src=paginas[actual];
+    contador.innerHTML="Página "+(actual+1)+" de "+paginas.length;
+
+    // BOTÓN ATRÁS
+    if(actual===0){
+        btnAnterior.style.visibility="hidden";
+    }else{
+        btnAnterior.style.visibility="visible";
+    }
+
+    // BOTÓN ADELANTE
+    if(actual<=1){
+        btnSiguiente.style.visibility="visible";
+    }else{
+        btnSiguiente.style.visibility="hidden";
+    }
+
+    // BOTÓN "SIGUIENTE PARADA"
+    if(actual>=2 && actual<=8){
+        zona.style.display="block";
+    }else{
+        zona.style.display="none";
+    }
+
+}
+
+// Flecha adelante
+btnSiguiente.onclick=function(){
+
+    if(actual<paginas.length-1){
+        actual++;
+        actualizar();
+    }
+
+}
+
+// Flecha atrás
+btnAnterior.onclick=function(){
+
+    if(actual>0){
+        actual--;
+        actualizar();
+    }
+
+}
+
+// Teclado
+document.addEventListener("keydown",function(e){
+
+    if(e.key==="ArrowLeft" && actual>0){
+
+        actual--;
+        actualizar();
+
+    }
+
+    if(e.key==="ArrowRight" && actual<=1){
+
+        if(actual<paginas.length-1){
+
+            actual++;
+            actualizar();
+
+        }
+
+    }
+
+});
+
+// Zona invisible "Siguiente parada"
+zona.onclick=function(){
+
+    if(actual>=2 && actual<paginas.length-1){
+
+        actual++;
+        actualizar();
+
+    }
+
+}
+
+actualizar();
+
+</script>
+
+</body>
+</html>
